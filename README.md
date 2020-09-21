@@ -68,3 +68,15 @@ The corresponding log from the Actor System at [::1]:25251 (corresponding to the
 ```
 [WARN] [akka.actor.ActorSystemImpl] [] [ClusterSystem-akka.actor.default-dispatcher-5] - Illegal request, responding with status '400 Bad Request': Illegal request-target: Invalid input '[', expected pchar, '/', '?' or 'EOI' (line 1, column 32): /cluster/members/ClusterSystem@[::1]:25251
 ```
+
+The other API calls requiring embedded member addresses, such as downing a member, also exhibit the same problem. For example:
+
+```
+curl -XPUT -F 'operation=Down' http://\[::1\]:25261/cluster/members/ClusterSystem@\[::1\]:25252
+```
+
+yields
+
+```
+Illegal request-target: Invalid input '[', expected pchar, '/', '?' or 'EOI' (line 1, column 32)
+```
