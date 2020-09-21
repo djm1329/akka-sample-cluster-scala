@@ -3,6 +3,7 @@ package sample.cluster.simple
 import akka.actor.typed.scaladsl.Behaviors
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.Behavior
+import akka.management.scaladsl.AkkaManagement
 import com.typesafe.config.ConfigFactory
 
 object App {
@@ -29,10 +30,12 @@ object App {
     // Override the configuration of the port
     val config = ConfigFactory.parseString(s"""
       akka.remote.artery.canonical.port=$port
+      akka.management.http.port=${if(port == 0) 0 else port.toInt + 10}
       """).withFallback(ConfigFactory.load())
 
     // Create an Akka system
-    ActorSystem[Nothing](RootBehavior(), "ClusterSystem", config)
+    val system = ActorSystem[Nothing](RootBehavior(), "ClusterSystem", config)
+    AkkaManagement(system).start()
   }
 
 }
