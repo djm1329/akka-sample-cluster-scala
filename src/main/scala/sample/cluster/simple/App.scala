@@ -30,7 +30,7 @@ object App {
     // Override the configuration of the port
     val config = ConfigFactory.parseString(s"""
       akka.remote.artery.canonical.port=$port
-      akka.management.http.port=${if(port == 0) 0 else port.toInt + 10}
+      akka.management.http.port=${if(port == 0) 0 else port + 10}
       """).withFallback(ConfigFactory.load())
 
     // Create an Akka system
